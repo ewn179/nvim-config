@@ -19,6 +19,7 @@ set wrap
 set linebreak
 set visualbell t_vb=
 cd /home/serezha/prog/
+
 call plug#begin()
 Plug 'idanarye/breeze.vim'
 Plug 'https://github.com/morhetz/gruvbox.git'
@@ -36,6 +37,9 @@ Plug 'https://github.com/preservim/nerdtree.git'
 Plug 'akinsho/toggleterm.nvim', {'tag' : '*'}
 Plug 'nvim-lualine/lualine.nvim'
 Plug 'kyazdani42/nvim-web-devicons'
+
+nnoremap <silent>    <C-,> <Cmd>BufferPrevious<CR>
+nnoremap <silent>    <C-.> <Cmd>BufferNext<CR>
 
 call plug#end()
 " status line
