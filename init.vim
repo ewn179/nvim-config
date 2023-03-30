@@ -1,9 +1,12 @@
+set clipboard^=unnamed,unnamedplus
+nnoremap <C-y> :"+y<CR>
+nnoremap <C-q> :qall<CR>
 set nu
 set rnu
+set guicursor=i:block
 set tabstop=4
 set shiftwidth=4
 set softtabstop=4
-set expandtab
 set autoindent
 set t_Co=256
 set mousehide
@@ -18,9 +21,12 @@ set noswapfile
 set wrap
 set linebreak
 set visualbell t_vb=
-cd /home/serezha/prog/
+cd /home/serezha/Work/Programming/Projects/
 
 call plug#begin()
+Plug 'hrsh7th/vim-vsnip'
+Plug 'hrsh7th/vim-vsnip-integ'
+Plug 'https://github.com/joshdick/onedark.vim.git'
 Plug 'idanarye/breeze.vim'
 Plug 'https://github.com/morhetz/gruvbox.git'
 Plug 'windwp/nvim-autopairs'
@@ -37,7 +43,6 @@ Plug 'https://github.com/preservim/nerdtree.git'
 Plug 'akinsho/toggleterm.nvim', {'tag' : '*'}
 Plug 'nvim-lualine/lualine.nvim'
 Plug 'kyazdani42/nvim-web-devicons'
-
 nnoremap <silent>    <C-,> <Cmd>BufferPrevious<CR>
 nnoremap <silent>    <C-.> <Cmd>BufferNext<CR>
 
@@ -46,7 +51,6 @@ call plug#end()
 lua << END
 require('lualine').setup()
 END
-  colorscheme gruvbox
 " autocloser 
 lua << EOF
 require("nvim-autopairs").setup {}
@@ -59,11 +63,17 @@ nnoremap <C-n> :NERDTree<CR>
 nnoremap <C-d> :NERDTreeToggle<CR>
 " terminal
 lua require("toggleterm").setup()
+
+" set
 autocmd TermEnter term://*toggleterm#*
       \ tnoremap <silent><c-t> <Cmd>exe v:count1 . "ToggleTerm"<CR>
-nnoremap <silent><C-t> <Cmd>exe v:count1 . "ToggleTerm"<CR>
-inoremap <silent><C-t> <Esc><Cmd>exe v:count1 . "ToggleTerm"<CR>
-" cmp
+
+" By applying the mappings this way you can pass a count to your
+" mapping to open a specific window.
+" For example: 2<C-t> will open terminal 2
+nnoremap <silent><c-t> <Cmd>exe v:count1 . "ToggleTerm"<CR>
+inoremap <silent><c-t> <Esc><Cmd>exe v:count1 . "ToggleTerm"<CR>
+
 lua <<EOF
   local cmp = require'cmp'
   cmp.setup({
@@ -109,8 +119,19 @@ lua <<EOF
       { name = 'cmdline' }
     })
   })
+  -- Set up lspconfig.
   local capabilities = require('cmp_nvim_lsp').default_capabilities()
-  require('lspconfig')['pyright'].setup {
+  -- Replace <YOUR_LSP_SERVER> with each lsp server you've enabled.
+  require('lspconfig')['rust_analyzer'].setup {
     capabilities = capabilities
   }
+  require('lspconfig')['gopls'].setup {
+    capabilities = capabilities
+  }
+
 EOF
+set termguicolors
+hi DiagnosticError guifg=Red
+hi DiagnosticWarn  guifg=Yellow
+hi DiagnosticInfo guifg=White
+hi DiagnosticHint  guifg=Green
